@@ -4,6 +4,10 @@ $light-yellow: #fefae0;
 $dark-yellow: #faedcd;
 $brown: #d4a373;
 
+@mixin bg-color($color: $green) {
+  background-color: $color;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -42,5 +46,9 @@ h2 {
 }
 
 .square:hover {
-  background-color: $green;
+  @include bg-color;
+}
+
+.winner-square {
+  @include bg-color;
 }

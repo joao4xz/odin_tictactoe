@@ -6,7 +6,6 @@ function createPlayer(name, mark, turn){
   return obj;
 }
 
-
 const arrayController = (function (){
   let board = ['','','','','','','','',''];
 
@@ -22,8 +21,8 @@ const arrayController = (function (){
 
 const displayController = (function(){
   const squares = document.querySelectorAll('.square');
+  const text = document.querySelector('h2');
 
-  
   squares.forEach( (element) => {
     element.addEventListener('click', () => {
       const classes = element.classList.value;
@@ -35,36 +34,57 @@ const displayController = (function(){
   return {
     drawMark: function(square, mark){
                 square.textContent = mark;
-              }
+              },
+    changeMessage: function(message){
+      text.textContent = message;
+    },
+    colorWinnerSquare: function(positions){
+      for(let i = 0; i < 3; i++){
+        squares[positions[i]].classList.add('winner-square');
+      }
+    } 
   }
 })();
 
 const gameController = (function(){
-  player1 = createPlayer('Player 1', 'X', true);
-  player2 = createPlayer('Player 2', 'O', false);
+  const player1 = createPlayer('Player 1', 'X', true);
+  const player2 = createPlayer('Player 2', 'O', false);
+  let isOver
+  const board = arrayController.getBoard();
+  const winArray = [[0,1,2],
+                    [3,4,5],
+                    [6,7,8],
+                    [0,3,6],
+                    [1,4,7],
+                    [2,5,8],
+                    [0,4,8],
+                    [2,4,6]];
+
+  function detectIsOver() {
+    for(let i = 0; i<8; i++){
+      if(board[winArray[i][0]] === board[winArray[i][1]] && board[winArray[i][0]] === board[winArray[i][2]] && board[winArray[i][0]] !== '') {
+        displayController.changeMessage(`Player ${board[winArray[i][0]]} wins!`);
+        displayController.colorWinnerSquare(winArray[i]);
+        return true;
+      }
+    }
+  }
 
   return {
     playTurn: function(square, pos){
-      if(player1.turn) {
-        arrayController.setBoard(pos, player1.mark);
-        displayController.drawMark(square, player1.mark);
-        player1.turn = false;
-        player2.turn = true;
-      }else if(player2.turn) {
-        arrayController.setBoard(pos, player2.mark);
-        displayController.drawMark(square, player2.mark);
-        player2.turn = false;
-        player1.turn = true;
+      if(square.textContent === '' && !isOver){
+        const currentPlayer = player1.turn ? player1 : player2;
+        const nextPlayer = player1.turn ? player2 : player1;
+
+        arrayController.setBoard(pos, currentPlayer.mark);
+        displayController.drawMark(square, currentPlayer.mark);
+        displayController.changeMessage(`Player ${nextPlayer.mark} turn`);
+
+        currentPlayer.turn = false;
+        nextPlayer.turn = true;
+
+        isOver = detectIsOver();
       }
-      console.log(arrayController.getBoard());
     }
   }
-})();
-
-// Game Flow Function
-(function(){
-  let isOver = false;
-
-  const board = arrayController.getBoard();
-
 })();
