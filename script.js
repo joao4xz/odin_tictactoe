@@ -1,27 +1,26 @@
-function createPlayer(name, mark, turn){
+function createPlayer(mark, turn){
   let obj = {};
-  obj.name = name;
   obj.mark = mark;
   obj.turn = turn;
   return obj;
 }
 
 const arrayController = (function (){
-  let board = ['','','','','','','','',''];
-
   return {
-    getBoard: function(){
-                return board;
-              },
+    board: ['','','','','','','','',''],
     setBoard: function(pos, marker){
-                board[pos] = marker;
-              }
+                arrayController.board[pos] = marker;
+              },
+    resetBoard: function(){
+      arrayController.board = ['','','','','','','','',''];
+    }
   }
 })();
 
 const displayController = (function(){
   const squares = document.querySelectorAll('.square');
   const text = document.querySelector('h2');
+  const resetButton = document.querySelector('.resetButton');
 
   squares.forEach( (element) => {
     element.addEventListener('click', () => {
@@ -29,6 +28,18 @@ const displayController = (function(){
       const pos = classes.charAt(classes.length - 1);
       gameController.playTurn(element, pos);
     });
+  });
+
+  resetButton.addEventListener('click', () => {
+    arrayController.resetBoard();
+    gameController.resetGameController();
+    squares.forEach( (element) => {
+      displayController.drawMark(element, '');
+    });
+    displayController.changeMessage(`Player X turn`);
+    for(let i = 0; i < 9; i++){
+      squares[i].classList.remove('winner-square');
+    }
   });
 
   return {
@@ -47,10 +58,9 @@ const displayController = (function(){
 })();
 
 const gameController = (function(){
-  const player1 = createPlayer('Player 1', 'X', true);
-  const player2 = createPlayer('Player 2', 'O', false);
-  let isOver
-  const board = arrayController.getBoard();
+  let player1 = createPlayer('X', true);
+  let player2 = createPlayer('O', false);
+  let isOver;
   const winArray = [[0,1,2],
                     [3,4,5],
                     [6,7,8],
@@ -62,8 +72,8 @@ const gameController = (function(){
 
   function detectIsOver() {
     for(let i = 0; i<8; i++){
-      if(board[winArray[i][0]] === board[winArray[i][1]] && board[winArray[i][0]] === board[winArray[i][2]] && board[winArray[i][0]] !== '') {
-        displayController.changeMessage(`Player ${board[winArray[i][0]]} wins!`);
+      if(arrayController.board[winArray[i][0]] === arrayController.board[winArray[i][1]] && arrayController.board[winArray[i][0]] === arrayController.board[winArray[i][2]] && arrayController.board[winArray[i][0]] !== '') {
+        displayController.changeMessage(`Player ${arrayController.board[winArray[i][0]]} wins!`);
         displayController.colorWinnerSquare(winArray[i]);
         return true;
       }
@@ -85,6 +95,11 @@ const gameController = (function(){
 
         isOver = detectIsOver();
       }
+    },
+    resetGameController: function(){
+      player1.turn = true;
+      player2.turn = false;
+      isOver = false;
     }
   }
 })();
