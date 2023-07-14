@@ -78,12 +78,14 @@ const gameController = (function(){
         displayController.colorWinnerSquare(winArray[i]);
         return true;
       }
-      else if(arrayController.board[i] !== ''){
+    }
+    for(let i = 0; i<9; i++) {
+      if(arrayController.board[i] !== ''){
         counter++;
         console.log(counter);
       }
     }
-    if(counter === 8) {
+    if(counter === 9) {
       displayController.changeMessage(`Draw!`);
       return true;
     }
