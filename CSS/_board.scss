@@ -9,7 +9,7 @@ h2 {
   justify-self: center;
   font-size: 2rem;
   font-weight: bold;
-  color: #d4a373;
+  color: $brown;
 }
 
 #board {
@@ -20,8 +20,8 @@ h2 {
 }
 
 .square {
-  background-color: #e9edc9;
-  color: #d4a373;
+  background-color: $light-green;
+  color: $brown;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,17 +31,17 @@ h2 {
 }
 
 .square:hover {
-  background-color: #ccd5ae;
+  @include bg-color;
 }
 
 .winner-square {
-  background-color: #ccd5ae;
+  @include bg-color;
 }
 
 .resetButton {
-  background-color: #e9edc9;
+  background-color: $light-green;
   border: none;
-  color: #d4a373;
+  color: $brown;
   font-weight: bold;
   font-size: 1.2rem;
   width: 100px;
@@ -50,12 +50,5 @@ h2 {
 }
 
 .resetButton:hover {
-  background-color: #ccd5ae;
+  @include bg-color;
 }
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-/*# sourceMappingURL=style.css.map */
