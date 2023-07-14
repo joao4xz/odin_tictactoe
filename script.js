@@ -71,12 +71,21 @@ const gameController = (function(){
                     [2,4,6]];
 
   function detectIsOver() {
+    let counter = 0;
     for(let i = 0; i<8; i++){
       if(arrayController.board[winArray[i][0]] === arrayController.board[winArray[i][1]] && arrayController.board[winArray[i][0]] === arrayController.board[winArray[i][2]] && arrayController.board[winArray[i][0]] !== '') {
         displayController.changeMessage(`Player ${arrayController.board[winArray[i][0]]} wins!`);
         displayController.colorWinnerSquare(winArray[i]);
         return true;
       }
+      else if(arrayController.board[i] !== ''){
+        counter++;
+        console.log(counter);
+      }
+    }
+    if(counter === 8) {
+      displayController.changeMessage(`Draw!`);
+      return true;
     }
   }
 
